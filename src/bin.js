@@ -6,7 +6,7 @@ import fs from "fs";
 import { createRequire } from "module";
 import path from "path";
 
-const DIR_NAME = ".ok-hooks";
+const DIR_NAME = ".bb-hooks";
 
 const DIR = path.resolve(process.cwd(), DIR_NAME);
 
@@ -26,7 +26,7 @@ function createDir(dir = DIR) {
   fs.mkdirSync(dir, { recursive: true });
 }
 function createShellContent(shell = "") {
-  return `#!/bin/sh\n\necho ":) ok-hooks run..."\n\n${shell}`;
+  return `#!/bin/sh\n\necho ":) bb-hooks run..."\n\n${shell}`;
 }
 function createShell(name = "", shell = "") {
   if (isFileExist(path.resolve(DIR, name))) {
@@ -90,7 +90,7 @@ function getHooks() {
     createRequire(import.meta.url)(
       path.resolve(process.cwd(), "package.json"),
     ) || {};
-  return pkg["ok-hooks"] || {};
+  return pkg["bb-hooks"] || {};
 }
 
 function checkGit() {
@@ -106,11 +106,11 @@ function setGitHook() {
   let { output } = spawnSync("git", ["config", "--get", "core.hooksPath"]);
 
   if (output.length) {
-    if (output.toString().indexOf(".ok-hooks") > -1) {
+    if (output.toString().indexOf(".bb-hooks") > -1) {
       return;
     } else {
-      spawnSync("git", ["config", "core.hooksPath", ".ok-hooks"]);
-      console.log(`========== Change core.hooksPath to .ok-hooks ============`);
+      spawnSync("git", ["config", "core.hooksPath", ".bb-hooks"]);
+      console.log(`========== Change core.hooksPath to .bb-hooks ============`);
     }
   }
 }
@@ -126,7 +126,7 @@ function main() {
 
   setGitHook();
 
-  console.log("========== ok-hooks init! ==========");
+  console.log("========== bb-hooks init! ==========");
 }
 
 checkGit() && main();

@@ -1,11 +1,11 @@
 {
-  "name": "ok-hooks",
+  "name": "bb-hooks",
   "version": "0.0.1",
   "description": "git hooks",
   "type": "module",
   "bin": "src/bin.js",
   "main": "src/bin.js",
-  "repository": "git@github.com:Mrooze-zeng/ok-hooks.git",
+  "repository": "git@github.com:Mrooze-zeng/bb-hooks.git",
   "license": "MIT",
   "private": false,
   "devDependencies": {}
