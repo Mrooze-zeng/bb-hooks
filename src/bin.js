@@ -27,6 +27,9 @@ function isFileExist(dir = DIR) {
 function createDir(dir = DIR) {
   fs.mkdirSync(dir, { recursive: true });
 }
+function createIgnoreFile(dir = DIR) {
+  fs.writeFileSync(path.resolve(dir, ".gitignore"), "*");
+}
 function createShellContent(shell = "") {
   return `#!/bin/sh\n\necho ":) bb-hooks run..."\n\n${shell}`;
 }
@@ -61,7 +64,9 @@ function checkExistShell() {
     let f = path.resolve(DIR, dir);
     let stat = fs.statSync(f);
     if (stat.isFile) {
-      shells.push(dir);
+      if (!dir.startsWith(".")) {
+        shells.push(dir);
+      }
     } else {
       fs.unlinkSync(f);
     }
@@ -123,6 +128,7 @@ function setGitHook() {
 function main() {
   if (!isFileExist()) {
     createDir();
+    createIgnoreFile();
   }
 
   const [hooks, version] = getHooks();
