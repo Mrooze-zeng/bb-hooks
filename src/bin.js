@@ -8,6 +8,8 @@ import path from "path";
 
 const DIR_NAME = ".bb-hooks";
 
+const MODE = 33261;
+
 const DIR = path.resolve(process.cwd(), DIR_NAME);
 
 const AVAILABLE_HOOKS = [
@@ -33,20 +35,18 @@ function createShell(name = "", shell = "") {
     fs.unlinkSync(path.resolve(DIR, name));
   }
   fs.writeFileSync(path.resolve(DIR, name), createShellContent(shell), {
-    mode: 0o755,
+    mode: MODE,
   });
 }
 
 function createShells(shellList = [], hooks = {}) {
+  const hooksArr = Object.keys(hooks);
   shellList.forEach((hook) => {
-    if (
-      !hooks[hook] ||
-      (hooks[hook] && !shellCompare(hook, hooks[hook])) ||
-      !AVAILABLE_HOOKS.includes(hook)
-    ) {
+    if (!hooksArr.includes(hook)) {
       fs.unlinkSync(path.resolve(DIR, hook));
     }
   });
+
   Object.keys(hooks).forEach((hook) => {
     AVAILABLE_HOOKS.includes(hook) &&
       !shellCompare(hook, hooks[hook]) &&
@@ -76,6 +76,10 @@ function getShellMd5(content = "") {
 
 function shellCompare(dir = "", shell = "") {
   if (isFileExist(path.resolve(DIR, dir))) {
+    const state = fs.statSync(path.resolve(DIR, dir));
+    if (state.mode !== MODE) {
+      return false;
+    }
     const buffer = fs.readFileSync(path.resolve(DIR, dir));
     const content = buffer.toString();
     const prevMd5 = getShellMd5(content);
