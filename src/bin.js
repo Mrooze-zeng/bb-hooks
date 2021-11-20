@@ -94,7 +94,7 @@ function getHooks() {
     createRequire(import.meta.url)(
       path.resolve(process.cwd(), "package.json"),
     ) || {};
-  return pkg["bb-hooks"] || {};
+  return [pkg["bb-hooks"] || {}, pkg["version"]];
 }
 
 function checkGit() {
@@ -124,13 +124,14 @@ function main() {
     createDir();
   }
 
-  const hooks = getHooks();
+  const [hooks, version] = getHooks();
 
   Object.keys(hooks).length && createShells(checkExistShell(), hooks);
 
   setGitHook();
 
-  console.log("========== bb-hooks init! ==========");
+  console.log(`========== bb-hooks init! ==========`);
+  console.log(`version: ${version}`);
 }
 
 checkGit() && main();
