@@ -90,11 +90,12 @@ function shellCompare(dir = "", shell = "") {
 }
 
 function getHooks() {
-  const pkg =
+  const config =
     createRequire(import.meta.url)(
       path.resolve(process.cwd(), "package.json"),
     ) || {};
-  return [pkg["bb-hooks"] || {}, pkg["version"]];
+  const pkg = createRequire(import.meta.url)("../package.json") || {};
+  return [config["bb-hooks"] || {}, pkg["version"]];
 }
 
 function checkGit() {
